@@ -1,4 +1,6 @@
-time = [
+
+deliver_time = [0,1,1,2,2,3]
+distance = [
     [0, 10, 75, 90, 5, 10], 
     [10, 0, 100, 25, 40,15],
     [75, 100, 0, 30, 25,40], 
@@ -6,10 +8,12 @@ time = [
     [5, 40, 25, 30, 0, 35],
     [10, 15, 40, 45, 35, 0]
 ]
-N=[1,2,3,4,5]
-to_writte=[-1 for x in range(len(N))]
-K=[1,2,3]
+N=5
+K=3
+N=[x for x in range(1,N+1)]
+K=[x for x in range(1,K+1)]
 n=len(N)
+to_writte=[-1 for x in range(len(N))]
 answer={}
 for i in range(n):
     for i1 in range(len(K)):
@@ -17,30 +21,17 @@ for i in range(n):
 note=[]
 def permutation(lst):
 
-	# If lst is empty then there are no permutations
 	if len(lst) == 0:
 		return []
 
-	# If there is only one element in lst then, only
-	# one permutation is possible
 	if len(lst) == 1:
 		return [lst]
 
-	# Find the permutations for lst if there are
-	# more than 1 characters
+	l = [] 
 
-	l = [] # empty list that will store current permutation
-
-	# Iterate the input(lst) and calculate the permutation
 	for i in range(len(lst)):
 	    m = lst[i]
-
-	    # Extract lst[i] or m from the list. remLst is
-	    # remaining list
 	    remLst = lst[:i] + lst[i+1:]
-
-	    # Generating all permutations where m is first
-	    # element
 	    for p in permutation(remLst):
 		    l.append([m] + p)
 	return l
@@ -55,8 +46,8 @@ def posible(N,K,answer,m):
         answer[m]=i
         posible(N,K,answer,m+1)
 posible(N,K,to_writte,0)
-result=10000000000
-opt=100000000000000
+result=float('inf')
+opt=float('inf')
 for i in note:
     last_move=[]
     for k in K:
@@ -69,21 +60,35 @@ for i in note:
     pathcost=0 
 
     for delivery in last_move:
-        optCost=10000000000
+        optCost=float('inf')
         if delivery ==[]:
             optCost=0
         for path in permutation(delivery):
-            cost=time[0][path[0]]
+            cost=distance[0][path[0]]
             
             for way in range(len(path)-1):
-                cost=cost+time[path[way]][path[way+1]]  #check again
+                cost=cost+distance[path[way]][path[way+1]]  #check again
             optCost=min(cost,optCost) 
         pathcost+=optCost
 
     if pathcost<result:
         result=pathcost
         opt=last_move
-[print('delivery man ',x+1,' ',opt[x]) for x in range(len(opt))]
-print('optimal solution result: ',result)
-
+print('Minimal solution result: ',result+sum(deliver_time))
+final=[]
+o=0
+for delivery in opt:
+        m=[]
+        optCost=float('inf')
+        for path in permutation(delivery):
+            cost=distance[0][path[0]]
+            
+            for way in range(len(path)-1):
+                cost=cost+distance[path[way]][path[way+1]]  #check again
+            if cost<=optCost:
+                optCost=cost
+                m=path
+                o+=cost
+        final.append(m)
+[print('delivery man ',x+1,':',final[x]) for x in range(len(final))]
 
