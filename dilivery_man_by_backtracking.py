@@ -1,4 +1,4 @@
-
+# input information here
 deliver_time = [0,1,1,2,2,3]
 distance = [
     [0, 10, 75, 90, 5, 10], 
@@ -35,6 +35,7 @@ def permutation(lst):
 	    for p in permutation(remLst):
 		    l.append([m] + p)
 	return l
+#using backtracking to listed all posible outcomes and then save it into note
 def posible(N,K,answer,m):
     global note
     if m==len(N):
@@ -48,6 +49,7 @@ def posible(N,K,answer,m):
 posible(N,K,to_writte,0)
 result=float('inf')
 opt=float('inf')
+#check each outcome
 for i in note:
     last_move=[]
     for k in K:
@@ -58,7 +60,7 @@ for i in note:
                 x.append(m1+1)
         last_move.append(x[::1])
     pathcost=0 
-
+    #for each outcome, check all available path of each 
     for delivery in last_move:
         optCost=float('inf')
         if delivery ==[]:
@@ -67,15 +69,16 @@ for i in note:
             cost=distance[0][path[0]]
             
             for way in range(len(path)-1):
-                cost=cost+distance[path[way]][path[way+1]]  #check again
+                cost=cost+distance[path[way]][path[way+1]]
             optCost=min(cost,optCost) 
         pathcost+=optCost
-
+    #save best possibility of each iteration
     if pathcost<result:
         result=pathcost
         opt=last_move
 print('Minimal solution result: ',result+sum(deliver_time))
 final=[]
+#print minimal path of each delivery mans
 o=0
 for delivery in opt:
         m=[]
