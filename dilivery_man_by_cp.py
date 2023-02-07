@@ -41,15 +41,6 @@ def main():
         ==0
       )
 
-    
-  #all customers visited exactly one
-  for h in range(1,N+1):
-    vehicle_in=sum(route[(k,h,j)] for j in range(1,N+1) for k in range(K) if h!=j)
-    
-    vehicle_out=sum(route[(k,j,h)] for j in range(1,N+1) for k in range(K) if h!=j)
-    
-    model.Add(vehicle_in+vehicle_out<=1)
-
   #object fuction
   obj=sum(distance[i][j]*route[(k,i,j)] for i in range(N+1) for j in range(N+1) for k in range(K) if j!=0)
   model.Minimize(obj)
